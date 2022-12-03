@@ -3,6 +3,7 @@ use clap::Parser;
 mod solution;
 mod week01;
 mod week02;
+mod week03;
 
 use solution::Solution;
 
@@ -17,6 +18,7 @@ struct Args {
 enum Solver {
     Week01(week01::Calories),
     Week02(week02::RPS),
+    Week03(week03::Rucksacks),
 }
 
 fn get_solver(input_file: &String, week: u8) -> Solver {
@@ -25,6 +27,7 @@ fn get_solver(input_file: &String, week: u8) -> Solver {
     let solver = match week {
         1 => Solver::Week01(week01::Calories::new(contents)),
         2 => Solver::Week02(week02::RPS::new(contents)),
+        3 => Solver::Week03(week03::Rucksacks::new(contents)),
         _ => panic!("Unknown week")
     };
 
@@ -44,5 +47,6 @@ fn main() {
     match get_solver(&args.input_file, args.week) {
         Solver::Week01(sv) => print_solutions(sv),
         Solver::Week02(sv) => print_solutions(sv),
+        Solver::Week03(sv) => print_solutions(sv),
     }
 }
