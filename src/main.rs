@@ -1,9 +1,9 @@
 use clap::Parser;
 
 mod solution;
-mod week01;
-mod week02;
-mod week03;
+mod day01;
+mod day02;
+mod day03;
 mod day04;
 
 
@@ -17,9 +17,9 @@ struct Args {
 }
 
 enum Solver {
-    Week01(week01::Calories),
-    Week02(week02::RPS),
-    Week03(week03::Rucksacks),
+    Day01(day01::Calories),
+    Day02(day02::RPS),
+    Day03(day03::Rucksacks),
     Day04(day04::Cleanup),
 }
 
@@ -27,9 +27,9 @@ fn get_solver(input_file: &String, week: u8) -> Solver {
     let contents = std::fs::read_to_string(input_file).unwrap();
 
     let solver = match week {
-        1 => Solver::Week01(week01::Calories::new(contents)),
-        2 => Solver::Week02(week02::RPS::new(contents)),
-        3 => Solver::Week03(week03::Rucksacks::new(contents)),
+        1 => Solver::Day01(day01::Calories::new(contents)),
+        2 => Solver::Day02(day02::RPS::new(contents)),
+        3 => Solver::Day03(day03::Rucksacks::new(contents)),
         4 => Solver::Day04(day04::Cleanup::new(contents)),
         _ => panic!("Unknown week")
     };
@@ -48,9 +48,9 @@ fn print_solutions<T: Solution>(solver: T) {
 fn main() {
     let args = Args::parse();
     match get_solver(&args.input_file, args.week) {
-        Solver::Week01(sv) => print_solutions(sv),
-        Solver::Week02(sv) => print_solutions(sv),
-        Solver::Week03(sv) => print_solutions(sv),
+        Solver::Day01(sv) => print_solutions(sv),
+        Solver::Day02(sv) => print_solutions(sv),
+        Solver::Day03(sv) => print_solutions(sv),
         Solver::Day04(sv) => print_solutions(sv),
     }
 }
