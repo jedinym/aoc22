@@ -5,6 +5,7 @@ mod day01;
 mod day02;
 mod day03;
 mod day04;
+mod day05;
 
 
 use solution::Solution;
@@ -21,6 +22,7 @@ enum Solver {
     Day02(day02::RPS),
     Day03(day03::Rucksacks),
     Day04(day04::Cleanup),
+    Day05(day05::Shipping),
 }
 
 fn get_solver(input_file: &String, week: u8) -> Solver {
@@ -31,6 +33,7 @@ fn get_solver(input_file: &String, week: u8) -> Solver {
         2 => Solver::Day02(day02::RPS::new(contents)),
         3 => Solver::Day03(day03::Rucksacks::new(contents)),
         4 => Solver::Day04(day04::Cleanup::new(contents)),
+        5 => Solver::Day05(day05::Shipping::new(contents)),
         _ => panic!("Unknown week")
     };
 
@@ -52,5 +55,6 @@ fn main() {
         Solver::Day02(sv) => print_solutions(sv),
         Solver::Day03(sv) => print_solutions(sv),
         Solver::Day04(sv) => print_solutions(sv),
+        Solver::Day05(sv) => print_solutions(sv),
     }
 }
