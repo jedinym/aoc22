@@ -143,22 +143,14 @@ impl Shipping {
 impl Solution for Shipping {
     fn part_one(&self) -> String {
         let mut columns = self.columns.clone();
-        Self::rearrange_crates(
-            &mut columns,
-            &self.instructions,
-            Self::executor_one,
-        );
+        Self::rearrange_crates(&mut columns, &self.instructions, Self::executor_one);
 
         Self::get_tops(&columns)
     }
 
     fn part_two(&self) -> String {
         let mut columns = self.columns.clone();
-        Self::rearrange_crates(
-            &mut columns,
-            &self.instructions,
-            Self::executor_two,
-        );
+        Self::rearrange_crates(&mut columns, &self.instructions, Self::executor_two);
 
         Self::get_tops(&columns)
     }

@@ -23,13 +23,15 @@ impl BitAnd for Range {
     type Output = bool;
 
     fn bitand(self, rhs: Self) -> Self::Output {
-        if self.left <= rhs.left && self.right >= rhs.left ||
-           rhs.left <= self.left && rhs.right >= self.left {
+        if self.left <= rhs.left && self.right >= rhs.left
+            || rhs.left <= self.left && rhs.right >= self.left
+        {
             return true;
         }
 
-        if self.right >= rhs.right && self.left <= rhs.right ||
-           rhs.right >= self.right && rhs.left <= self.right {
+        if self.right >= rhs.right && self.left <= rhs.right
+            || rhs.right >= self.right && rhs.left <= self.right
+        {
             return true;
         }
 
@@ -108,9 +110,11 @@ impl Cleanup {
 impl Solution for Cleanup {
     fn part_one(&self) -> String {
         let ranges = self.get_ranges();
-        let count_crossing = ranges.into_iter()
-                                    .map(|(fst, snd)| fst | snd)
-                                    .filter(|b| *b).count();
+        let count_crossing = ranges
+            .into_iter()
+            .map(|(fst, snd)| fst | snd)
+            .filter(|b| *b)
+            .count();
 
         return count_crossing.to_string();
     }
@@ -118,9 +122,11 @@ impl Solution for Cleanup {
     fn part_two(&self) -> String {
         let ranges = self.get_ranges();
 
-        let count_overlapping = ranges.into_iter()
-                                      .map(|(fst, snd)| fst & snd)
-                                      .filter(|b| *b).count();
+        let count_overlapping = ranges
+            .into_iter()
+            .map(|(fst, snd)| fst & snd)
+            .filter(|b| *b)
+            .count();
 
         return count_overlapping.to_string();
     }
