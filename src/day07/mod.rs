@@ -1,7 +1,7 @@
 use crate::solution::Solution;
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::{collections::VecDeque, io::Lines, str::FromStr};
+use std::{collections::VecDeque, io::Lines, str::FromStr, iter::FromIterator};
 
 lazy_static! {
     static ref CD_RGX: Regex = Regex::new(r#"\$ cd (.*)"#).unwrap();
@@ -43,15 +43,13 @@ enum Item {
 }
 
 pub struct FileSystem {
-    root: Directory,
+    root: Item,
 }
 
 impl FileSystem {
     fn change_directory<'a, I>(mut cwd: Directory, lines: &mut I) -> Directory
         where I: Iterator<Item = &'a str>
     {
-        println!("cd to: {:?}", cwd);
-
         // I mutably borrow the iterator later, so I cannot use for
         while let Some(line) = lines.next() {
             if line == "$ cd .." {
@@ -77,13 +75,13 @@ impl FileSystem {
         return cwd;
     }
 
-    fn parse(input: String) -> Directory {
+    fn parse(input: String) -> Item {
         let mut iterator = input.lines();
         iterator.next().expect("Empty input!"); // skip root (cd /)
 
         let root = Directory {name: "/".to_string(), items: Vec::new(), size: 0};
 
-        return Self::change_directory(root, &mut iterator);
+        return Item::Dir(Self::change_directory(root, &mut iterator));
     }
 
     fn add_item(cwd: &mut Directory, line: &str) {
@@ -102,16 +100,65 @@ impl FileSystem {
     pub fn new(input: String) -> FileSystem {
         return FileSystem { root: Self::parse(input) };
     }
+
+    fn sum_dirs(item: &Item) -> usize {
+        match item {
+            Item::Dir(dir) => {
+                let subitems: usize = dir.items.iter()
+                                         .map(|itm| Self::sum_dirs(itm))
+                                         .sum();
+
+                if dir.size <= 100000 {
+                    dir.size + subitems
+                } else {
+                    subitems
+                }
+            },
+            _ => 0
+        }
+    }
+
+    fn flatten_sizes(&self) -> Vec<usize> {
+        let mut vc = Vec::new();
+        Self::flatten_sizes_rec(&mut vc, &self.root);
+
+        return vc;
+    }
+
+    fn flatten_sizes_rec(vec: &mut Vec<usize>, item: &Item) {
+        match item {
+            Item::Dir(dir) => {
+                vec.push(dir.size);
+                for itm in &dir.items {
+                    Self::flatten_sizes_rec(vec, itm)
+                }
+            },
+            _ => ()
+        }
+    }
 }
 
 impl Solution for FileSystem {
     fn part_one(&self) -> String {
-        println!("\n{:?}", self.root);
-
-        String::new()
+        return Self::sum_dirs(&self.root).to_string();
     }
 
     fn part_two(&self) -> String {
-        String::new()
+        let flattened_sizes = self.flatten_sizes();
+        let root_size;
+
+        if let Item::Dir(root) = &self.root {
+            root_size = root.size;
+        } else {
+            panic!("Root is a file?")
+        }
+
+        let needed = root_size - 40000000;
+
+        return flattened_sizes.into_iter()
+                              .filter(|size| size > &needed)
+                              .min()
+                              .expect("Empty input?")
+                              .to_string();
     }
 }
