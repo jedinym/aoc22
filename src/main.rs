@@ -6,6 +6,7 @@ mod day03;
 mod day04;
 mod day05;
 mod day06;
+mod day07;
 mod solution;
 
 use solution::Solution;
@@ -27,6 +28,7 @@ fn get_solver(input_file: &String, week: u8) -> Box<dyn Solution> {
         4 => Box::new(day04::Cleanup::new(contents)),
         5 => Box::new(day05::Shipping::new(contents)),
         6 => Box::new(day06::Comms::new(contents)),
+        7 => Box::new(day07::FileSystem::new(contents)),
         _ => panic!("Unknown week"),
     }
 }
